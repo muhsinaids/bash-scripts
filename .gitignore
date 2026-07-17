@@ -20,3 +20,4 @@ install.yml
 main.tf
 snap/
 terraform.tfstate
+.viminfo
