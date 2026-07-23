@@ -55,14 +55,52 @@ fi
 log_dir="./logs4"
 log_file="$log_dir/batch_history.txt"
 
-if [ -e "$log_dir" ] && [ -d "$log_dir" ]
+if [ -e "$log_dir" ] && [ ! -d "$log_dir" ]
 then
     echo "Error: A file named '$log_dir' already exists" >&2
     echo "Please remove the file '$log_dir' and try again" >&2
     exit 1
 fi
 
-if [ !-d "$log_dir ]
+if [ ! -d "$log_dir" ]
 then
     mkdir "$log_dir"
 fi
+
+echo "---NEW SCRIPT EXECUTION---" >> "$log_file"
+
+if [ -n "$file_path" ]
+then
+    while IFS= read -r line_name || [ -n "$line_name" ]
+    do
+      if [ -z "$line_name" ]
+      then
+          continue
+      fi
+
+      for (( i=1; i<=count; i++ ))
+      do
+        echo "Loop $i : hello $line_name"
+        echo "Loop $i : hello $line_name" >> "$log_file"
+      done
+    done < "$file_path"
+
+else
+    for (( i=1; i<=count; i++ ))
+      do
+        echo "loop $i : hello $name"
+        echo "loop $i : hello $name" >> "$log_file"
+      done
+fi
+
+echo "Execution completed! for log file : cat ./logs3/batch_history.txt"
+
+if [ "$name" = "Guest" ] && [ "$count" -eq 4 ] && [ -z "$file_path" ]
+then
+    echo "--------------------------------------------------------"
+    echo "        HINT: YOU RAN WITH DEFAULT ARGUMENTS            "
+    echo "Single usage: ./level8.sh -n <name> -c <count>"
+    echo "Batch usage: ./level8.sh -f <file.txt> -c <count>"
+    echo "--------------------------------------------------------"
+fi
+
